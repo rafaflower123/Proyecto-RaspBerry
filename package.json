@@ -1,0 +1,27 @@
+{
+  "name": "rasp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@influxdata/influxdb-client": "^1.35.0",
+    "@influxdata/influxdb-client-apis": "^1.35.0",
+    "axios": "^1.7.7",
+    "cli-cursor": "^5.0.0",
+    "colors": "^1.4.0",
+    "csvtojson": "^2.0.10",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "inquirer": "^12.1.0",
+    "nodemon": "^3.1.7",
+    "systeminformation": "^5.23.5",
+    "terminal-image": "^3.0.0",
+    "ws": "^8.18.0"
+  }
+}

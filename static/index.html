@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Raspberry Pi System Monitor</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- CSS -->
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #3c3c53);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        background: linear-gradient(135deg, #2a2a3f, #1e1e2f);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, #ffcc00, #ff8c00);
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .data-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #383856, #2f2f47);
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+
+      .data-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .data-item span {
+        font-size: 1.2rem;
+      }
+
+      .temperature.green {
+        color: #32cd32;
+      }
+
+      .temperature.red {
+        color: #ff6347;
+      }
+
+      footer {
+        margin-top: 2rem;
+        font-size: 0.85rem;
+        opacity: 0.8;
+        color: #cccccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Raspberry Pi System Monitor</h1>
+
+      <div class="data-item">
+        <span>🌡️ Temperature:</span>
+        <span id="temperature" class="temperature">-- °C</span>
+      </div>
+
+      <div class="data-item">
+        <span>🖥️ CPU Load:</span>
+        <span id="cpu-load">-- %</span>
+      </div>
+      <div class="data-item">
+        <span
+          ><i class="fa-brands fa-linux" style="color: #74c0fc"></i> OS:</span
+        >
+        <span id="os-info">-- %</span>
+      </div>
+      <div class="data-item">
+        <span><i class="fa-solid fa-wifi"></i> Interface:</span>
+        <span id="interface">-- </span>
+      </div>
+      <div class="data-item">
+        <span
+          ><i class="fa-solid fa-network-wired" style="color: greenyellow"></i>
+          Network:</span
+        >
+        <span id="network">-- </span>
+      </div>
+      <div class="data-item">
+        <span
+          ><i class="fa-solid fa-microchip" style="color: blueviolet"></i>
+          Average CPU Speed:</span
+        >
+        <span id="speed">-- </span>
+      </div>
+      <div class="data-item">
+        <span
+          ><i class="fa-solid fa-fire" style="color: red"></i> Max CPU
+          Frequency:</span
+        >
+        <span id="max-freq">-- </span>
+      </div>
+      <footer>Equipo 8 :D</footer>
+    </div>
+
+    <!-- WebSocket Script -->
+    <script>
+      const ws = new WebSocket("ws://pi:8080");
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        const temperatureElement = document.getElementById("temperature");
+        const cpuLoadElement = document.getElementById("cpu-load");
+        const osInfoElement = document.getElementById("os-info");
+        const interfaceElement = document.getElementById("interface");
+        const networkElement = document.getElementById("network");
+        const speedElement = document.getElementById("speed");
+        const maxFreqElement = document.getElementById("max-freq");
+        // Update the temperature display
+        const temperature = data.cpuTemperature;
+        temperatureElement.textContent = `${temperature} °C`;
+
+        if (temperature > 50) {
+          temperatureElement.classList.add("red");
+          temperatureElement.classList.remove("green");
+        } else {
+          temperatureElement.classList.add("green");
+          temperatureElement.classList.remove("red");
+        }
+
+        // Update CPU Load and RAM Usage (simulated for demo)
+        cpuLoadElement.textContent = `${(Math.random() * 100) | 0} %`;
+        osInfoElement.textContent = data.osInfo;
+        interfaceElement.textContent = data.interface;
+        networkElement.textContent = data.network;
+        speedElement.textContent = data.speed;
+        maxFreqElement.textContent = data.maxFreq;
+      };
+    </script>
+  </body>
+</html>
